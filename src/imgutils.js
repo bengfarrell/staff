@@ -3,6 +3,7 @@ var ImageUtils =  {
 
     /**
      * scale down
+     * BOOO...doesn't work, can't deal with non-integer widths/heights and lining up pixels
      * @param pxs
      * @param scalefactor
      * @returns {*}
@@ -10,33 +11,37 @@ var ImageUtils =  {
     scaleDown: function(pxs, scalefactor) {
         var width = pxs.width;
         var height = pxs.height;
-        var rowsize = width * 4;
+        var ratio = width/height;
         var len = pxs.data.length;
-        var pixels = new Uint8ClampedArray(pxs.data.length/(scalefactor*2));
+        var newlen = len/scalefactor;
+        var newheight = Math.ceil(Math.sqrt((newlen/4) / ratio));
+        var newwidth = Math.ceil((newlen/4)/newheight);
+        newlen = newheight * newwidth * 4;
+        var rowsize = width * 4;
+        var pixels = new Uint8ClampedArray(newlen);
 
-        for (var c = 0; c < len; c += 4 * scalefactor) {
+        var count = 0;
+        for (var c = 0; c < len; c += 4 * scalefactor)  {
             var neighbors = [c - 4, c + 4, c - rowsize, c + rowsize, c - 4 - rowsize, c + 4 - rowsize, c - 4 + rowsize, c + 4 + rowsize];
             var numNeighbors = neighbors.length;
+            var foundneighbors = 0;
             var r = 0;
             var b = 0;
             var g = 0;
-            var neighbors = 0;
             for (var neighbor = 0; neighbor < numNeighbors; neighbor++) {
                 if (neighbors[neighbor] >= 0 && neighbors[neighbor] < len) {
                     r += pxs.data[neighbors[neighbor]];
                     g += pxs.data[neighbors[neighbor] + 1];
                     b += pxs.data[neighbors[neighbor] + 2];
-                    neighbors ++;
+                    foundneighbors++;
                 }
             }
-            pixels[c] = r/neighbors;
-            pixels[c+1] = g/neighbors;
-            pixels[c+2] = b/neighbors;
-            pixels[c+3] = 255; // alpha
+            pixels[c / scalefactor] = parseInt(r / foundneighbors);
+            pixels[c / scalefactor + 1] = parseInt(g / foundneighbors);
+            pixels[c / scalefactor + 2] = parseInt(b / foundneighbors);
+            pixels[c / scalefactor + 3] = 255; // alpha
         }
-
-        console.log(pixels.length, pxs.data.length)
-        return new ImageData(pixels, width/scalefactor, height/scalefactor);
+        return new ImageData(pixels, newwidth, newheight);
     },
 
     /**
@@ -237,3 +242,15 @@ var ImageUtils =  {
         return { image: pxs, blobs: blobCoords } ;
     }
 };
+
+ /*
+ 8 x 8 = 64
+ 4 x 4 = 16
+ 2 x 2 = 4
+
+80 x 80 = 6400
+/                  40 x 40 = 1600
+20 x 20 = 400
+                   10 x 10 = 100
+5 x 5 =   25
+*/
