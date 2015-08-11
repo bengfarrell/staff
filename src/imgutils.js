@@ -2,49 +2,6 @@ var ImageUtils =  {
     MIN_BLOB_SIZE: 100,
 
     /**
-     * scale down
-     * BOOO...doesn't work, can't deal with non-integer widths/heights and lining up pixels
-     * @param pxs
-     * @param scalefactor
-     * @returns {*}
-     */
-    scaleDown: function(pxs, scalefactor) {
-        var width = pxs.width;
-        var height = pxs.height;
-        var ratio = width/height;
-        var len = pxs.data.length;
-        var newlen = len/scalefactor;
-        var newheight = Math.ceil(Math.sqrt((newlen/4) / ratio));
-        var newwidth = Math.ceil((newlen/4)/newheight);
-        newlen = newheight * newwidth * 4;
-        var rowsize = width * 4;
-        var pixels = new Uint8ClampedArray(newlen);
-
-        var count = 0;
-        for (var c = 0; c < len; c += 4 * scalefactor)  {
-            var neighbors = [c - 4, c + 4, c - rowsize, c + rowsize, c - 4 - rowsize, c + 4 - rowsize, c - 4 + rowsize, c + 4 + rowsize];
-            var numNeighbors = neighbors.length;
-            var foundneighbors = 0;
-            var r = 0;
-            var b = 0;
-            var g = 0;
-            for (var neighbor = 0; neighbor < numNeighbors; neighbor++) {
-                if (neighbors[neighbor] >= 0 && neighbors[neighbor] < len) {
-                    r += pxs.data[neighbors[neighbor]];
-                    g += pxs.data[neighbors[neighbor] + 1];
-                    b += pxs.data[neighbors[neighbor] + 2];
-                    foundneighbors++;
-                }
-            }
-            pixels[c / scalefactor] = parseInt(r / foundneighbors);
-            pixels[c / scalefactor + 1] = parseInt(g / foundneighbors);
-            pixels[c / scalefactor + 2] = parseInt(b / foundneighbors);
-            pixels[c / scalefactor + 3] = 255; // alpha
-        }
-        return new ImageData(pixels, newwidth, newheight);
-    },
-
-    /**
      * convert image to grayscale
      * @param {ImageData} pxs
      * @returns {*}
