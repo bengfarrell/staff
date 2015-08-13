@@ -1,5 +1,5 @@
 var ImageUtils =  {
-    MIN_BLOB_SIZE: 100,
+    MIN_BLOB_SIZE: 50,
 
     /**
      * convert image to grayscale
@@ -33,7 +33,7 @@ var ImageUtils =  {
                 }
             }
 
-            diff.data[c] = dr
+            diff.data[c] = draw;
             diff.data[c+1] = draw;
             diff.data[c+2] = draw;
             diff.data[c+3]= 255;
