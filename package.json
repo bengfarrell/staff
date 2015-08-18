@@ -5,5 +5,9 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-sourcemaps": "^1.5.2"
+  },
+  "dependencies": {
+    "ccwc-videocamera": "git://github.com/creativecode-webcomponents/ccwc-videocamera.git",
+    "ccwc-videoplayer": "git://github.com/creativecode-webcomponents/ccwc-videoplayer.git"
   }
 }
