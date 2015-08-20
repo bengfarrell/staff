@@ -3,26 +3,27 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Video Camera Demo</title>
-    <link rel="import" href="../node_modules/ccwc-videocamera/ccwc-videocamera.html">
+    <link rel="import" href="../node_modules/ccwc-videoplayer/ccwc-videoplayer.html">
     <script src="../src/imgutils.js"></script>
 
     <style>
-        ccwc-videocamera {
+        ccwc-videoplayer {
             width: 640px;
             height: 480px;
         }
     </style>
 </head>
 
-<ccwc-videocamera
+<!-- Sample to big to be in repo, download from: http://www.videezy.com/transportation/94-frogger-highway -->
+<ccwc-videoplayer
         frameDataMode="imagedata"
-        canvasRefreshInterval="100"
-        currentSource="1"
+        canvasRefreshInterval="50"
+        src="./images/FroggerHighway.mp4"
         useCanvasForDisplay>
-</ccwc-videocamera>
+</ccwc-videoplayer>
 
 <br />
-<button onclick="capture(event)">Capture Baseline</button>
+<button onclick="capture(event)">Video Diff</button>
 
 <br />
 <input type="range" value="90" min="0" max="100" step="1" id="tolerance" oninput="onSliderChange(event)">
@@ -31,13 +32,11 @@
     var baselineimage = null;
     var lastframe = null;
     var tolerance = parseInt(document.querySelector('#tolerance').value);
-    document.querySelector('ccwc-videocamera').addEventListener('frameupdate', function(event) {
+    document.querySelector('ccwc-videoplayer').addEventListener('frameupdate', function(event) {
         var data = event.detail;
         lastframe = data.framedata;
         if (baselineimage) {
-            var diff = ImageUtils.toDiff(data.framedata, baselineimage, tolerance);
-            var blobs = ImageUtils.findBlobs((diff), {paint: true});
-            data.canvascontext.putImageData(blobs.image, 0, 0, 0, 0, data.width, data.height );
+            data.canvascontext.putImageData(ImageUtils.toDiff(data.framedata, baselineimage, tolerance), 0, 0, 0, 0, data.width, data.height );
         }
     });
 
