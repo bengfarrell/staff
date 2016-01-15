@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <link rel="import" href="node_modules/ccwc-video/ccwc-glvideo.html">
+        <script src="src/main.js"></script>
+        <style>
+            ccwc-video {
+                width: 640px;
+                height: 480px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <ccwc-video
+                src="videos/test.mp4"
+                useWebGL='{"filter": "sobel_edge_detection"}'
+                useCanvasForDisplay
+                canvasRefreshInterval="10">
+        </ccwc-video>
+        <span>hi</span>
+    </body>
+</html>

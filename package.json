@@ -2,12 +2,18 @@
   "name": "staff",
   "version": "0.0.1",
   "devDependencies": {
+    "babel": "^5.8.21",
+    "babel-preset-es2015": "^6.0.12",
+    "babelify": "^7.0.2",
+    "browserify": "^12.0.1",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.1.0",
-    "gulp-sourcemaps": "^1.5.2"
+    "gulp-babel": "^5.2.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "ccwc-videocamera": "git://github.com/creativecode-webcomponents/ccwc-videocamera.git",
-    "ccwc-videoplayer": "git://github.com/creativecode-webcomponents/ccwc-videoplayer.git"
+    "ccwc-video": "git+https://github.com/creativecode-webcomponents/ccwc-video.git",
+    "ccwc-image-utils": "git+https://github.com/creativecode-webcomponents/ccwc-image-utils.git"
   }
 }
